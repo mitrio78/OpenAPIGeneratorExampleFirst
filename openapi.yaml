@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: MediaStack
+  description: Mediastack.com
+  version: 1.0.0
+servers:
+  - url: http://api.mediastack.com/v1
+tags:
+  - name: articles
+    description: News
+paths:
+  /news:
+    get:
+      tags:
+      - articles
+      summary: News List
+      operationId: everythingGet
+      parameters:
+      - name: access_key
+        in: query
+        description: Api key
+        required: true
+        schema:
+          type: string
+      - name: languages
+        in: query
+        description: Languages
+        required: false
+        schema:
+          type: string
+      - name: categories
+        in: query
+        description: Category
+        required: false
+        schema:
+          type: string
+      - name: keywords
+        in: query
+        description: Keywords
+        required: false
+        schema:
+          type: string
+      - name: offset
+        in: query
+        description: Keywords
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Keywords
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsList'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorModel'
+components:
+  schemas:
+    NewsList:
+      required:
+      - "pagination"
+      - "data"
+      properties:
+        pagination:
+          required:
+            - "limit"
+            - "offset"
+            - "count"
+            - "total"
+          properties:
+            limit:
+              type: "number"
+            offset:
+              type: "number"
+            count:
+              type: "number"
+            total:
+              type: "number"
+          type: "object"
+        data:
+          type: "array"
+          items:
+            type: "object"
+            properties:
+              title:
+                type: "string"
+              description:
+                type: "string"
+              url:
+                type: "string"
+              source:
+                type: "string"
+              category:
+                type: "string"
+              language:
+                type: "string"
+              country:
+                type: "string"
+              published_at:
+                type: "string"
+    ErrorModel:
+      required:
+      - "error"
+      properties:
+        error:
+          required:
+            - "code"
+            - "message"
+            - "context"
+          properties:
+            code:
+              type: "string"
+            message:
+              type: "string"
+            context:
+              required:
+                - "date"
+              properties:
+                date:
+                  type: "array"
+                  items:
+                    type: "string"
+              type: "object"
+          type: "object"
